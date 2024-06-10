@@ -14,11 +14,6 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
-    },
-    {
       path: '/contact',
       name: 'contact',
       component: () => import('../views/ContactView.vue')
@@ -43,6 +38,26 @@ const router = createRouter({
       path: '/register', 
       name: 'register', 
       component: ()=> import ('../views/RegisterView.vue')
+    },
+    {
+      path: '/admin', 
+      name: 'admin', 
+      component:() => import('../views/AdminView.vue')
+    },
+    {
+      path: '/registerProduct',
+      name: 'registerProduct',
+      component:() => import('../views/RegisterProductView.vue')
+    },
+    {
+      path: '/editProduct',
+      name: 'editProduct',
+      component:()=>import('../views/EditProductView.vue')
+    },
+    {
+      path: '/deleteProduct',
+      name: 'deleteProduct',
+      component:()=>import('../views/DeleteProductView.vue')
     }
   ]
 })

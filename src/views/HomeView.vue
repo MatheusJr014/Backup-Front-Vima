@@ -1,11 +1,27 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 // import Navbar from '@/components/Navbar.vue';
 import Button from '@/components/Button.vue';
-// import Feedback from '@/components/Feedback.vue';
+
+const products = ref([]);
+
+const fetchProducts = async () => {
+  try {
+    const response = await axios.get('https://localhost:7077/produtos');
+    products.value = response.data;
+  } catch (error) {
+    console.error('Erro ao buscar os produtos:', error);
+  }
+};
+
+onMounted(() => {
+  fetchProducts();
+});
 </script>
 
 <template>
-  <div class="">
+  <div>
     <Navbar />
   </div>
   <div class="container">
@@ -29,157 +45,21 @@ import Button from '@/components/Button.vue';
   <div class="divisor"></div>
 
   <div class="text-center">
-    <p class="sub-title" style="margin-bottom: 1vh;"><b>CAMISETA OVERSIZED</b></p>
+    <p class="sub-title" style="margin-bottom: 1vh;"><b>PRODUTOS EM DESTAQUE</b></p>
   </div>
+
   <div class="row">
-    <div class="col text-center">
+    <div v-for="product in products" :key="product.id" class="col text-center">
       <div class="card">
         <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2022/05/camiseta-heavy-oversized-brunx-ind-roxa-4.jpg"
-            alt="" />
-          <h6 lass="card-title">Camiseta Heavy Oversized Brunx Ind – Roxa</h6>
-          <p class="product-price"> <b>R$ 89,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img
-            src="https://brunxind.com/wp-content/uploads/2022/04/camiseta-heavy-oversized-brunx-ind-verde-floresta-4.jpg"
-            alt="" />
-          <h6 lass="card-title">Camiseta Heavy Oversized Brunx Ind – Verde Floresta</h6>
-          <p class="product-price"> <b>R$ 89,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2023/05/heavy-oversized-chumbo-5-1-700x1050.jpg" alt="" />
-          <h6 lass="card-title">Camiseta Heavy Oversized Brunx Ind – Chumbo</h6>
-          <p class="product-price"> <b>R$ 89,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img
-            src="https://brunxind.com/wp-content/uploads/2023/04/camiseta-heavy-oversized-brunx-ind-marrom-cafe-4-700x1050.jpg"
-            alt="" />
-          <h6 lass="card-title">Camiseta Heavy Oversized Brunx Ind – Marrom</h6>
-          <p class="product-price"> <b>R$ 89,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="text-center">
-    <p class="sub-title" style="margin-top: 5vh;"><b>CROPPED REGULAR</b></p>
-  </div>
-  <div class="row">
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2024/04/brunx-ind-cropped-regular-preto-3-700x1050.jpg"
-            alt="" />
-          <h6 lass="card-title">Cropped Regular Brunx Ind <br>– Preto</h6>
-          <p class="product-price"> <b>R$ 49,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2024/04/brunx-ind-cropped-regular-verde-3.jpg" alt="" />
-          <h6 lass="card-title">Cropped Regular Brunx Ind <br>– Verde Água</h6>
-          <p class="product-price"> <b>R$ 49,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2024/04/brunx-ind-cropped-regular-rosa-3.jpg" alt="" />
-          <h6 lass="card-title">Cropped Regular Brunx Ind <br>– Rosa Pink</h6>
-          <p class="product-price"> <b>R$ 49,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2024/04/brunx-ind-cropped-regular-off-white-3-1.jpg"
-            alt="" />
-          <h6 lass="card-title">Cropped Regular Brunx Ind <br>– Off White</h6>
-          <p class="product-price"> <b>R$ 49,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="text-center">
-    <p class="sub-title" style="margin-top: 5vh;"><b>BERMUDA</b></p>
-  </div>
-  <div class="row">
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2022/04/bermuda-moletom-brunx-ind-bordo-3-768x1152.jpg"
-            alt="" />
-          <h6 lass="card-title">Bermuda Moletom Streetwear <br>– Bordô</h6>
-          <p class="product-price"> <b>R$ 89,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2022/04/bermuda-moletom-brunx-ind-preto-3.jpg" alt="" />
-          <h6 lass="card-title">Bermuda Cargo Streetwear Brunx Ind – Preta</h6>
-          <p class="product-price"> <b>R$ 89,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2024/02/bermuda-moletom-brunx-ind-marrom-2.jpg" alt="" />
-          <h6 lass="card-title">Camiseta Basic Streetwear <br>– Marrom</h6>
-          <p class="product-price"> <b>R$ 89,90</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
-        </div>
-      </div>
-    </div>
-
-    <div class="col text-center">
-      <div class="card">
-        <div class="card-body">
-          <img src="https://brunxind.com/wp-content/uploads/2024/02/bermuda-moletom-brunx-ind-off-white-3.jpg" alt="" />
-          <h6 lass="card-title">Bermuda Moletom Streetwear <br>– Off White</h6>
-          <p class="product-price"> <b>R$ 89,99</b></p>
-          <router-link class="nav-link" aria-current="page" to="/product"><a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">Adicionar ao carrinho</a></router-link>
+          <img :src="product.imageURL" alt="" />
+          <h6 class="card-title">{{ product.nome }}</h6>
+          <p class="product-price"> <b>R$ {{ product.preco }}</b></p>
+          <router-link :to="`/product/${product.id}`">
+            <a style="background-color: #212529; border: none;" href="#" class="btn btn-primary">
+              Adicionar ao carrinho
+            </a>
+          </router-link>
         </div>
       </div>
     </div>
@@ -192,9 +72,6 @@ import Button from '@/components/Button.vue';
           <h2 class="estoque-text">QUEIMA DE ESTOQUE</h2>
           <Button/>
         </div>
-      </div>
-      <div class="row">
-
       </div>
     </div>
   </div>
@@ -260,7 +137,6 @@ import Button from '@/components/Button.vue';
   transition: all 500ms;
 }
 
-
 .divisor {
   background-color: #212529;
   height: 5vh;
@@ -300,54 +176,54 @@ import Button from '@/components/Button.vue';
   text-align: center;
 }
 
-.testimonials{
-    display: flex;
-    padding: 4rem 1rem;
-    justify-content: space-evenly;
+.testimonials {
+  display: flex;
+  padding: 4rem 1rem;
+  justify-content: space-evenly;
 }
 
-.testimonial{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-basis: 30%;
-    text-align: center;
-    box-shadow: 0 0 5px #afafaf;
-    padding: 1rem;
-    border-radius: 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-basis: 30%;
+  text-align: center;
+  box-shadow: 0 0 5px #afafaf;
+  padding: 1rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.testimonial:hover{
-    transform: translateY(-5px);
+.testimonial:hover {
+  transform: translateY(-5px);
 }
 
 .testimonial p {
-    margin: 5px 0;
+  margin: 5px 0;
 }
 
-.testimonial p:first-child{
-    font-weight: bold;
-    font-size: 5rem;
-    color: #34e7f8;
-    margin-top: 3rem;
-    line-height: 2rem;
+.testimonial p:first-child {
+  font-weight: bold;
+  font-size: 5rem;
+  color: #34e7f8;
+  margin-top: 3rem;
+  line-height: 2rem;
 }
 
-.testimonial p:last-child{
-    font-weight: bold;
+.testimonial p:last-child {
+  font-weight: bold;
 }
 
 /* Media Queries */
-@media (max-width: 800px){
-    .testimonials{
-        flex-direction: column;
-    }
+@media (max-width: 800px) {
+  .testimonials {
+    flex-direction: column;
+  }
 
-    .testimonial{
-        margin-bottom: 1.2rem;
-    }
+  .testimonial {
+    margin-bottom: 1.2rem;
+  }
 }
 </style>

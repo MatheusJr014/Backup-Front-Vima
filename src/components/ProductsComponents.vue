@@ -1,65 +1,65 @@
 <template>
-    <div class="product-container container-fluid">
-      <div class="row">
-        <div class="col-md-5">
-          <div class="product-img">
-            <div class="carousel">
-              <div class="carousel-inner">
-                <div v-for="(image, index) in images" :key="index" :class="{ 'carousel-item': true, active: index === currentIndex }">
-                  <img :src="image.src" class="d-block w-100" :alt="'Slide ' + index">
-                </div>
+  <div class="product-container container-fluid">
+    <div class="row">
+      <div class="col-md-5" v-if="product">
+        <div class="product-img">
+          <div class="carousel">
+            <div class="carousel-inner">
+              <div v-for="(image, index) in images" :key="index" :class="{ 'carousel-item': true, active: index === currentIndex }">
+                <img :src="image.src" class="d-block w-100" :alt="'Slide ' + index">
               </div>
-              <a class="carousel-control-prev" @click="prevSlide" role="button">
-                <span class="carousel-control-prev-icon" aria-hidden="false"></span>
-              </a>
-              <a class="carousel-control-next" @click="nextSlide" role="button">
-                <span class="carousel-control-next-icon" aria-hidden="false"></span>
-              </a>
             </div>
-            <div class="carousel-thumbnails">
-              <img v-for="(image, index) in images" :key="index" :src="image.src" class="thumbnail" :class="{ active: index === currentIndex }" @click="changeSlide(index)">
-            </div>
+            <a class="carousel-control-prev" @click="prevSlide" role="button">
+              <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+            </a>
+            <a class="carousel-control-next" @click="nextSlide" role="button">
+              <span class="carousel-control-next-icon" aria-hidden="false"></span>
+            </a>
           </div>
-        </div>
-        <div class="col-md-7">
-          <h1><strong>Camiseta Premium - Preto</strong></h1>
-          <div class="preco">
-            <h3><strong>R$&nbsp;87,94</strong></h3>
-          </div> 
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Quantidade</th>
-                <th scope="col">Desconto</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(discount, index) in discounts" :key="index">
-                <th scope="row">{{ discount.quantity }}</th>
-                <td>{{ discount.percent }}% OFF</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="product-input">
-            <p>Aplica-se a este produto e pode ser combinado com produtos de outras categorias selecionadas.</p>
-            <span class="input-heading">Tamanho:</span>
-            <select v-model="selectedMaterial" class="form-control">
-              <option value="">Selecione o tamanho:</option>
-              <option value="P">P</option>
-              <option value="M">M</option>
-              <option value="G">G</option>
-              <option value="XL">XL</option>
-            </select>
-            <span class="input-heading">Quantidade:</span>
-            <input type="number" v-model.number="quantity" class="form-control small-textinput" placeholder="0">
-            <h4 class="inventory" v-if="inventory > 0">Restam {{ inventory }} em estoque</h4>
-            <h4 class="inventory" v-else>Sem estoque</h4>
-            <button @click="addToCart" class="btn btn-primary bg-dark" style="margin: 5px;">Adicionar ao carrinho</button>
+          <div class="carousel-thumbnails">
+            <img v-for="(image, index) in images" :key="index" :src="image.src" class="thumbnail" :class="{ active: index === currentIndex }" @click="changeSlide(index)">
           </div>
         </div>
       </div>
+      <div class="col-md-7" v-if="product">
+        <h1><strong>{{ product.nome }}</strong></h1>
+        <div class="preco">
+          <h3><strong>R$&nbsp;{{ product.preco }}</strong></h3>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Quantidade</th>
+              <th scope="col">Desconto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(discount, index) in discounts" :key="index">
+              <th scope="row">{{ discount.quantity }}</th>
+              <td>{{ discount.percent }}% OFF</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="product-input">
+          <p>{{ product.descricao }}</p>
+          <span class="input-heading">Tamanho:</span>
+          <select v-model="selectedMaterial" class="form-control">
+            <option value="">Selecione o tamanho:</option>
+            <option v-for="size in sizes" :key="size" :value="size">{{ size }}</option>
+          </select>
+          <span class="input-heading">Quantidade:</span>
+          <input type="number" v-model.number="quantity" class="form-control small-textinput" placeholder="0">
+          <h4 class="inventory" v-if="inventory > 0">Restam {{ inventory }} em estoque</h4>
+          <h4 class="inventory" v-else>Sem estoque</h4>
+          <button @click="addToCart" class="btn btn-primary bg-dark" style="margin: 5px;">Adicionar ao carrinho</button>
+        </div>
+      </div>
+      <div v-else>
+        <p>Produto não encontrado.</p>
+      </div>
     </div>
-  </template>
+  </div>
+</template>
   
   <script>
   export default {
@@ -84,6 +84,27 @@
       };
     },
     methods: {
+      async fetchProduct() {
+      try {
+        const response = await axios.get('https://localhost:7077/produto/100'); // Atualize o ID do produto
+        const productData = response.data;
+        
+        // Verifique se a propriedade ImageURL existe no produto
+        if (productData.imageURL) {
+          // Supondo que imageURL seja uma única string
+          this.images = [{ src: productData.imageURL }];
+        } else {
+          this.images = []; // Caso contrário, defina images como um array vazio
+        }
+        
+        this.product = productData;
+        this.inventory = productData.estoque;
+        this.sizes = productData.tamanhos || [];
+      } catch (error) {
+        console.error('Erro ao buscar o produto:', error);
+        this.product = null; // Define o produto como null para mostrar a mensagem de produto não encontrado
+      }
+      },
       addToCart() {
         if (this.quantity > 0 && this.inventory >= this.quantity) {
           console.log(`${this.quantity} ${this.selectedMaterial}`);
